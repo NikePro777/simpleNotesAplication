@@ -1,45 +1,20 @@
-const yargs = require("yargs");
-const pkg = require("./package.json");
-const { addNote, printNotes, removeNote } = require("./notes.controller");
-const { describe } = require("yargs");
+const http = require("http");
+const chalk = require("chalk");
+const path = require("path");
+const fs = require("fs/promises");
 
-yargs.version(pkg.version);
-yargs.command({
-  command: "add",
-  describe: "Add new note to list",
-  builder: {
-    title: {
-      type: "string",
-      describe: "Note title",
-      demandOption: true,
-    },
-  },
-  handler({ title }) {
-    addNote(title);
-  },
+const port = 3000;
+const basePath = path.join(__dirname, "pages");
+
+const server = http.createServer(async (req, res) => {
+  if (req.method === "GET") {
+    const content = await fs.readFile(path.join(basePath, "index.html"));
+    res.setHeader("Content-Type", "text/html");
+    // res.writeHead(200, { "Content-Type": "text/html" });
+    res.end(content);
+  }
 });
 
-yargs.command({
-  command: "list",
-  describe: "Print all notes",
-  async handler() {
-    printNotes();
-  },
+server.listen(port, () => {
+  console.log(chalk.green("кажись запустили"));
 });
-
-yargs.command({
-  command: "remove",
-  describe: "Remove note by id",
-  builder: {
-    id: {
-      type: "string",
-      describe: "id",
-      demandOption: true,
-    },
-  },
-  async handler({ id }) {
-    removeNote(id);
-  },
-});
-
-yargs.parse(); // это чтобы все команды которыу мы создали yargsом работали
