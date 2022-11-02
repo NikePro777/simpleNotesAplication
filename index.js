@@ -1,6 +1,7 @@
 const express = require("express");
 const chalk = require("chalk");
-const { addNote, getNotes } = require("./notes.controller");
+const path = require("path");
+const { addNote, getNotes, removeNote } = require("./notes.controller");
 
 const port = 3000;
 const app = express();
@@ -8,11 +9,13 @@ const app = express();
 app.set("view engine", "ejs"); // Это чтоб экспресс знал что мы пользуемся шаблонизатором ejs
 app.set("views", "pages"); // Изначально экспресс думает что все страницы которые надо показать лежат в views
 app.use(express.urlencoded({ extended: true })); // это чтоб кодировка была нормальная (даже русский понимает)
+app.use(express.static(path.resolve(__dirname, "public")));
 
 app.get("/", async (req, res) => {
   res.render("index", {
     title: "Expresss App",
     notes: await getNotes(),
+    created: false,
   });
 });
 
@@ -21,6 +24,16 @@ app.post("/", async (req, res) => {
   res.render("index", {
     title: "Expresss App",
     notes: await getNotes(),
+    created: true,
+  });
+});
+
+app.delete("/:id", async (req, res) => {
+  await removeNote(req.params.id);
+  res.render("index", {
+    title: "Expresss App",
+    notes: await getNotes(),
+    created: false,
   });
 });
 
