@@ -41,9 +41,12 @@ async function removeNote(id) {
   await saveNotes(filtered);
   console.log(chalk.red(`note with id = '${id}' was delete!`));
 }
-
+async function edit(id) {
+  prompt("Введите");
+}
 module.exports = {
   addNote,
   getNotes,
   removeNote,
+  edit,
 };
