@@ -10,6 +10,7 @@ app.set("view engine", "ejs"); // Это чтоб экспресс знал чт
 app.set("views", "pages"); // Изначально экспресс думает что все страницы которые надо показать лежат в views
 app.use(express.urlencoded({ extended: true })); // это чтоб кодировка была нормальная (даже русский понимает)
 app.use(express.static(path.resolve(__dirname, "public")));
+app.use(express.json()); // чтобы данные на сервер в формате JSON можно было отправлять
 
 app.get("/", async (req, res) => {
   res.render("index", {
@@ -19,7 +20,7 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.post("/", async (req, res) => {
+app.post("/:id", async (req, res) => {
   await addNote(req.body.title);
   res.render("index", {
     title: "Expresss App",
@@ -37,8 +38,10 @@ app.delete("/:id", async (req, res) => {
   });
 });
 
-app.put("/:id", async (req, res) => {
-  await edit(req.params.id);
+app.put("/:editPost", async (req, res) => {
+  let notes = await getNotes();
+  const editNote = JSON.parse(req.params.editPost);
+  await edit(editNote);
   res.render("index", {
     title: "Expresss App",
     notes: await getNotes(),

@@ -41,8 +41,15 @@ async function removeNote(id) {
   await saveNotes(filtered);
   console.log(chalk.red(`note with id = '${id}' was delete!`));
 }
-async function edit(id) {
-  prompt("Введите");
+
+async function edit(editNote) {
+  const notes = await getNotes();
+  notes.forEach((note) => {
+    if (note.id === editNote.id) {
+      note.title = editNote.title;
+    }
+  });
+  await saveNotes(notes);
 }
 module.exports = {
   addNote,
