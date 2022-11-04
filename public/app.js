@@ -13,10 +13,12 @@ document.addEventListener("click", (event) => {
         id: event.target.dataset.id,
         title: editNote,
       };
+      edit(JSON.stringify(newNote)).then(() => {
+        // console.log("1=", event.target.closest("li").children[0].innerHTML);
+        // event.target.closest("li").p.innerHTML = editNote;
+      });
+      event.target.closest("li").children[0].innerHTML = editNote;
     }
-    edit(JSON.stringify(newNote)).then(() => {
-      console.log("можно менять на фронте");
-    });
   }
 });
 

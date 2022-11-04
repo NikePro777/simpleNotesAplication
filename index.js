@@ -20,7 +20,7 @@ app.get("/", async (req, res) => {
   });
 });
 
-app.post("/:id", async (req, res) => {
+app.post("/", async (req, res) => {
   await addNote(req.body.title);
   res.render("index", {
     title: "Expresss App",
