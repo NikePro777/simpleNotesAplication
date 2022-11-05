@@ -7,17 +7,17 @@ document.addEventListener("click", (event) => {
   }
 
   if (event.target.dataset.type === "edit") {
-    let editNote = prompt("Введите новое название");
-    if (editNote) {
-      newNote = {
-        id: event.target.dataset.id,
-        title: editNote,
-      };
-      edit(JSON.stringify(newNote)).then(() => {
-        // console.log("1=", event.target.closest("li").children[0].innerHTML);
-        // event.target.closest("li").p.innerHTML = editNote;
+    const title = event.target.dataset.title;
+    let editNote = prompt("Введите новое название", title);
+    if (editNote !== null) {
+      edit(
+        JSON.stringify({
+          id: event.target.dataset.id,
+          title: editNote,
+        })
+      ).then(() => {
+        event.target.closest("li").children[0].innerText = editNote;
       });
-      event.target.closest("li").children[0].innerHTML = editNote;
     }
   }
 });
